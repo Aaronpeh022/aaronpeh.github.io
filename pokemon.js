@@ -41,8 +41,6 @@ image.src = "./img/Pellet Town.png"
 const playerImage = new Image()
 playerImage.src = "./img/playerDown.png"
 
-
-
 const player = new Sprite({
     position: {
         x: canvas.width / 2 - 192 / 4 / 2,
