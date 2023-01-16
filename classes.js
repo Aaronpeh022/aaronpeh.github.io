@@ -8,13 +8,13 @@ class Boundary {
     }
 
     draw() {
-        c.fillStyle = 'rgba(255, 0, 0, 0.0)'
+        c.fillStyle = 'rgba(255, 0, 0, 0.5)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 
 class Sprite {
-    constructor({ position, velocity, image, frame = { max: 1 }, sprites = [] }) {
+    constructor({ position, velocity, image, frame = { max: 1 }, sprites = [], animate = false }) {
         this.position = position
         this.image = image
         this.frame = {...frame, val: 0, elapsed: 0}
@@ -22,7 +22,7 @@ class Sprite {
             this.width = this.image.width / this.frame.max
             this.height = this.image.height
         }
-        this.moving = false
+        this.animate = animate
         this.sprites = sprites
     }
 
@@ -38,7 +38,7 @@ class Sprite {
             this.image.width / this.frame.max,
             this.image.height
         )
-        if (!this.moving) return
+        if (!this.animate) return
         if (this.frame.max > 1) {
             this.frame.elapsed++
         }
