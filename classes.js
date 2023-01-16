@@ -24,9 +24,13 @@ class Sprite {
         }
         this.animate = animate
         this.sprites = sprites
+        this.opacity = 1
+        this.health = 100
     }
 
     draw() {
+        c.save()
+        c.globalAlpha = this.opacity
         c.drawImage(
             this.image,
             this.frame.val * this.width,
@@ -38,6 +42,7 @@ class Sprite {
             this.image.width / this.frame.max,
             this.image.height
         )
+        c.restore()
         if (!this.animate) return
         if (this.frame.max > 1) {
             this.frame.elapsed++
@@ -46,5 +51,36 @@ class Sprite {
             if (this.frame.val < this.frame.max - 1) this.frame.val++
             else this.frame.val = 0
         }
+    }
+
+    attack({attack, recipient}) {
+        const tl = gsap.timeline()
+        tl.to(this.position, {
+            x: this.position.x - 20
+        }).to(this.position, {
+            x: this.position.x + 40,
+            duration: 0.1,
+            onComplete: () => {
+                gsap.to('#enemyHealthBar', {
+                    width: this.health - attack.damage + '%'
+                })
+
+                gsap.to(recipient.position, {
+                    x: recipient.position.x +  10,
+                    yoyo: true,
+                    repeat: 5,
+                    duration: 0.08
+                })
+
+                gsap.to(recipient, {
+                    opacity: 0,
+                    repeat: 5,
+                    yoyo: true,
+                    duration: 0.08
+                })
+            }
+        }).to(this.position, {
+            x: this.position.x
+        })
     }
 }
