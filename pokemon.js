@@ -318,65 +318,6 @@ function animate() {
 }
 animate()
 
-const battleBackgroundImage = new Image()
-battleBackgroundImage.src = "./img/battleBackground.png"
-const battleBackground = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    image: battleBackgroundImage
-})
-
-const draggleImage = new Image()
-draggleImage.src = "./img/draggleSprite.png"
-const draggle = new Sprite({
-    position: {
-        x: 800,
-        y: 100
-    },
-    image: draggleImage,
-    frame: {
-        max: 4
-    },
-    animate: true
-})
-
-const embyImage = new Image()
-embyImage.src = "./img/embySprite.png"
-const emby = new Sprite({
-    position: {
-        x: 280,
-        y: 325
-    },
-    image: embyImage,
-    frame: {
-        max: 4
-    },
-    animate: true
-})
-
-function animateBattle() {
-    window.requestAnimationFrame(animateBattle)
-    battleBackground.draw()
-    draggle.draw()
-    emby.draw()
-}
-animateBattle()
-
-document.querySelectorAll('button').forEach((button) => {
-    button.addEventListener('click', () => {
-        emby.attack({
-            attack: {
-                name: "Tackle",
-                damage: 10,
-                type: "Normal"
-            },
-            recipient: draggle
-        })
-    })
-})
-
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'w':
