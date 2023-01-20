@@ -14,12 +14,16 @@ const emby = new Monster(monsters.Emby)
 
 const renderedSprites = [draggle, emby]
 
-const button = document.createElement("button")
-button.innerHTML = 'Fireball'
-document.querySelector('#attacksBox').append(button)
+emby.attacks.forEach((attack) =>{
+    const button = document.createElement("button")
+    button.innerHTML = attack.name
+    document.querySelector('#attacksBox').append(button)
+})
+
+let battleAnimationId
 
 function animateBattle() {
-    window.requestAnimationFrame(animateBattle)
+    battleAnimationId = window.requestAnimationFrame(animateBattle)
     battleBackground.draw()
 
     renderedSprites.forEach((sprite) => {
@@ -39,21 +43,47 @@ document.querySelectorAll('button').forEach((button) => {
             renderedSprites
         })
 
+        if (draggle.health <= 0) {
+            queue.push(() => {
+                draggle.faint()
+            })
+            queue.push(() => {
+                gsap.to("#overlappingDiv", {
+                    opacity: 1,
+                    onComplete: () => {
+                        cancelAnimationFrame(battleAnimationId)
+                        animate()
+                        gsap.to("#overlappingDiv", {
+                            opacity: 0
+                        })
+                    }
+                })
+            })
+        }
+
+        const randomAtk = draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)]
+
         queue.push(() => {
             draggle.attack({
-                attack: attacks.Tackle,
+                attack: randomAtk,
                 recipient: emby,
                 renderedSprites
             })
         })
 
-        queue.push(() => {
-            draggle.attack({
-                attack: attacks.Fireball,
-                recipient: emby,
-                renderedSprites
+        if (emby.health <= 0) {
+            queue.push(() => {
+                emby.faint()
             })
-        })
+        }
+    })
+
+    
+
+    button.addEventListener('mouseenter', (e) => {
+        const selectedAttack = attacks[e.currentTarget.innerHTML]
+        document.querySelector('#attackType').innerHTML = selectedAttack.type
+        document.querySelector('#attackType').style.color = selectedAttack.color
     })
 })
 

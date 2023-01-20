@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({ position, velocity, image, frame = { max: 1 }, sprites = [], animate = false, isEnemy = false, hold = 30, rotation = 0, name }) {
+    constructor({ position, velocity, image, frame = { max: 1 }, sprites = [], animate = false, isEnemy = false, hold = 30, rotation = 0  }) {
         this.position = position
         this.image = image
         this.frame = { ...frame, val: 0, elapsed: 0 }
@@ -10,7 +10,6 @@ class Sprite {
         this.animate = animate
         this.sprites = sprites
         this.opacity = 1
-        this.health = 100
         this.hold = hold
         this.rotation = rotation
     }
@@ -58,7 +57,8 @@ class Monster extends Sprite {
         animate = false, 
         rotation = 0, 
         isEnemy = false,
-        name 
+        name,
+        attacks
     }) {
         super({
             position,
@@ -72,6 +72,17 @@ class Monster extends Sprite {
         this.health = 100
         this.isEnemy = isEnemy
         this.name = name
+        this.attacks = attacks
+    }
+
+    faint() {
+        document.querySelector('#dialogueBox').innerHTML = this.name + " fainted!"
+        gsap.to(this.position, {
+            y: this.position.y + 20
+        })
+        gsap.to(this, {
+            opacity: 0
+        })
     }
 
     attack({ attack, recipient, renderedSprites }) {
@@ -79,7 +90,7 @@ class Monster extends Sprite {
         document.querySelector('#dialogueBox').style.display = "block"
         document.querySelector('#dialogueBox').innerHTML = this.name + " used " + attack.name
 
-        this.health -= attack.damage
+        recipient.health -= attack.damage
 
         let rotation = 1
         if(this.isEnemy)  rotation = -2.2
@@ -112,7 +123,7 @@ class Monster extends Sprite {
                     y: recipient.position.y,
                     onComplete: () => {
                         gsap.to(healthBar, {
-                            width: this.health - attack.damage + '%'
+                            width: recipient.health - attack.damage + '%'
                         })
 
                         gsap.to(recipient.position, {
@@ -146,7 +157,7 @@ class Monster extends Sprite {
                     duration: 0.1,
                     onComplete: () => {
                         gsap.to(healthBar, {
-                            width: this.health - attack.damage + '%'
+                            width: recipient.health - attack.damage + '%'
                         })
 
                         gsap.to(recipient.position, {

@@ -178,18 +178,18 @@ function animate() {
                 console.log("In battlezone")
                 window.cancelAnimationFrame(animationId)
                 battle.initiated = true
-                gsap.to("#overlapping-div", {
+                gsap.to("#overlappingDiv", {
                     opacity: 1,
                     repeat: 3,
                     yoyo: true,
                     duration: 0.4,
                     onComplete() {
-                        gsap.to('#overlapping-div', {
+                        gsap.to('#overlappingDiv', {
                             opacity: 1,
                             duration: 0.4,
                             onComplete() {
                                 animateBattle(),
-                                gsap.to("#overlapping-div", {
+                                gsap.to("#overlappingDiv", {
                                     opacity: 0,
                                     duration: 0.4
                                 })

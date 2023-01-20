@@ -29,9 +29,11 @@
     </style>
 </head>
 <div style="display: inline-block; position: relative;">
-    <div id="overlapping-div"
-        style="background-color: black; position: absolute; top:0; right: 0; bottom:0; left: 0; opacity: 0;pointer-events: none;">
+    <div id="overlappingDiv"
+        style="background-color: black; position: absolute; top:0; right: 0; bottom:0; left: 0; opacity: 0;pointer-events: none; z-index: 10;">
     </div>
+    <canvas>
+    </canvas>
 
     <!-- Enemy health -->
     <div style="
@@ -65,8 +67,7 @@
                 style="height: 5px; background-color: green; position: absolute; top: 0; left: 0; right: 0;"></div>
         </div>
     </div>
-    <canvas>
-    </canvas>
+
     <div style="
         background-color: white; 
         height:140px; 
@@ -105,7 +106,7 @@
             width: 33.33%;
             border-left: 4px black solid;
         ">
-            <h1>Attack type</h1>
+            <h1 id="attackType">Attack type</h1>
         </div>
     </div>
 </div>
