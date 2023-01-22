@@ -3,7 +3,7 @@ layout: default
 modal-id: 1
 date: 2021-1-23
 img: pokemon.jpg
-alt: image-alt
+alt: pokemon-image
 project-date: April 2014
 client: Start Bootstrap
 category: Web Development
