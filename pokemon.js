@@ -80,7 +80,8 @@ const player = new Sprite({
     },
     image: playerDownImage,
     frame: {
-        max: 4
+        max: 4,
+        hold: 10
     },
     sprites: {
         up: playerUpImage,
@@ -177,6 +178,10 @@ function animate() {
             ) {
                 console.log("In battlezone")
                 window.cancelAnimationFrame(animationId)
+
+                audio.Map.stop()
+                audio.initBattle.play()
+                audio.battle.play()
                 battle.initiated = true
                 gsap.to("#overlappingDiv", {
                     opacity: 1,
@@ -188,6 +193,7 @@ function animate() {
                             opacity: 1,
                             duration: 0.4,
                             onComplete() {
+                                initBattle(),
                                 animateBattle(),
                                 gsap.to("#overlappingDiv", {
                                     opacity: 0,
@@ -195,9 +201,6 @@ function animate() {
                                 })
                             }
                         })
-
-                        //activate a new animation loop
-                        animateBattle()
                     }
                 })
                 break
@@ -353,5 +356,13 @@ window.addEventListener('keyup', (e) => {
         case 'd':
             keys.d.pressed = false
             break
+    }
+})
+
+let clicked = false
+addEventListener('click', () => {
+    if(!clicked) {
+        audio.Map.play()
+        clicked = true
     }
 })

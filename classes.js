@@ -1,27 +1,35 @@
 class Sprite {
-    constructor({ position, velocity, image, frame = { max: 1 }, sprites = [], animate = false, isEnemy = false, hold = 30, rotation = 0  }) {
+    constructor({
+        position,
+        velocity,
+        image,
+        frame = { max: 1, hold: 10 },
+        sprites = [],
+        animate = false,
+        rotation = 0
+    }) {
         this.position = position
-        this.image = image
+        this.image = new Image()
         this.frame = { ...frame, val: 0, elapsed: 0 }
         this.image.onload = () => {
             this.width = this.image.width / this.frame.max
             this.height = this.image.height
         }
+        this.image.src = image.src
         this.animate = animate
         this.sprites = sprites
         this.opacity = 1
-        this.hold = hold
         this.rotation = rotation
     }
 
     draw() {
         c.save()
         c.translate(
-            this.position.x + this.width/2,
+            this.position.x + this.width / 2,
             this.position.y + this.height / 2)
         c.rotate(this.rotation)
         c.translate(
-            -this.position.x - this.width/2,
+            -this.position.x - this.width / 2,
             -this.position.y - this.height / 2)
         c.globalAlpha = this.opacity
         c.drawImage(
@@ -40,7 +48,7 @@ class Sprite {
         if (this.frame.max > 1) {
             this.frame.elapsed++
         }
-        if (this.frame.elapsed % 30 === 0) {
+        if (this.frame.elapsed % this.frame.hold === 0) {
             if (this.frame.val < this.frame.max - 1) this.frame.val++
             else this.frame.val = 0
         }
@@ -54,8 +62,8 @@ class Monster extends Sprite {
         image,
         frame = { max: 1, hold: 10 },
         sprites,
-        animate = false, 
-        rotation = 0, 
+        animate = false,
+        rotation = 0,
         isEnemy = false,
         name,
         attacks
@@ -83,6 +91,8 @@ class Monster extends Sprite {
         gsap.to(this, {
             opacity: 0
         })
+        audio.battle.stop()
+        audio.victory.play()
     }
 
     attack({ attack, recipient, renderedSprites }) {
@@ -93,13 +103,14 @@ class Monster extends Sprite {
         recipient.health -= attack.damage
 
         let rotation = 1
-        if(this.isEnemy)  rotation = -2.2
+        if (this.isEnemy) rotation = -2.2
 
         let healthBar = "#enemyHealthBar"
         if (this.isEnemy) healthBar = "#selfHealthBar"
 
         switch (attack.name) {
             case 'Fireball':
+                audio.initFireball.play()
                 const fireballImage = new Image()
                 fireballImage.src = "./img/fireball.png"
                 const fireball = new Sprite({
@@ -122,6 +133,7 @@ class Monster extends Sprite {
                     x: recipient.position.x,
                     y: recipient.position.y,
                     onComplete: () => {
+                        audio.fireballHit.play()
                         gsap.to(healthBar, {
                             width: recipient.health - attack.damage + '%'
                         })
@@ -156,6 +168,7 @@ class Monster extends Sprite {
                     x: this.position.x + movementDistance * 2,
                     duration: 0.1,
                     onComplete: () => {
+                        audio.tackleHit.play()
                         gsap.to(healthBar, {
                             width: recipient.health - attack.damage + '%'
                         })
@@ -177,7 +190,7 @@ class Monster extends Sprite {
                 }).to(this.position, {
                     x: this.position.x
                 })
-            break;
+                break;
         }
     }
 }
@@ -192,7 +205,7 @@ class Boundary {
     }
 
     draw() {
-        c.fillStyle = 'rgba(255, 0, 0, 0.5)'
+        c.fillStyle = 'rgba(255, 0, 0, 0)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
