@@ -7,5 +7,5 @@ alt: pokemon-image
 project-date: April 2014
 client: Start Bootstrap
 category: Web Development
-description: A Pokemon-looking game that is created by purely using javascript, html and css. Audio and animation are included using howl and gsap in order to simulate battle sequence.
+description: A Pokemon-looking game that is created by purely using javascript, html and css. Audio and animation are included using howl and gsap in order to simulate battle sequence. Click <a href="./pokemon.html">here</a> to try the pokemon game.
 ---
